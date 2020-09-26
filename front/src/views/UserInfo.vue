@@ -43,6 +43,7 @@ export default {
   computed: {
     ...mapGetters({
       _userId: "auth/_userId",
+      user: "auth/userInfo",
     }),
   },
   methods: {
@@ -63,21 +64,17 @@ export default {
     logout() {
       this.$store.dispatch("auth/logout").then(() => this.$router.push("/"));
     },
-    async getUserInfo(_userId) {
+    getUserInfo(_userId) {
       try {
-        const response = await authApi.getUserInfo(_userId);
-        if (response.status == 200) {
-          this.email = response.data.email;
-          this.name = response.data.name;
-        }
+        this.$store.dispatch("auth/getUserInfo", _userId);
       } catch (e) {
         alert(e.message);
       }
     },
   },
   mounted() {
-    // this.email = this.user.email;
-    // this.name = this.user.name;
+    this.email = this.user.email;
+    this.name = this.user.name;
   },
 };
 </script>

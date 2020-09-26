@@ -5,6 +5,10 @@ export default {
   state: {
     token: null,
     _userId: null,
+    user: {
+      email: null,
+      name: null,
+    },
   },
   mutations: {
     setToken(state, payload) {
@@ -18,6 +22,10 @@ export default {
       state._userId = null
       localStorage.removeItem('token')
       localStorage.removeItem('_userId')
+    },
+    SET_USER(state, { email, name }) {
+      state.user.email = email
+      state.user.name = name
     },
   },
   actions: {
@@ -39,6 +47,16 @@ export default {
     logout({ commit }) {
       commit('logout')
     },
+    async getUserInfo({ commit }, id) {
+      try {
+        const response = await authApi.getUserInfo(id)
+        if (response.status == 200) {
+          commit('SET_USER', response.data)
+        }
+      } catch (e) {
+        throw e
+      }
+    },
   },
   getters: {
     token(state) {
@@ -48,6 +66,9 @@ export default {
     _userId(state) {
       state._userId = state._userId || localStorage._userId
       return state._userId
+    },
+    userInfo(state) {
+      return state.user
     },
   },
 }

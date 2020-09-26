@@ -110,8 +110,6 @@ router.patch('/update/:id', verify, async (req, res) => {
     }
   )
 
-  console.log(result)
-
   try {
     res.send(result)
   } catch (err) {
